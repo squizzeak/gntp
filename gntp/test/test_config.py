@@ -12,15 +12,15 @@ BACKUP_CONFIG = os.path.expanduser('~/.gntp.backup')
 
 
 class ConfigTests(GNTPTestCase):
-	def setUp(self):
-		if os.path.exists(ORIGINAL_CONFIG):
-			os.rename(ORIGINAL_CONFIG, BACKUP_CONFIG)
-		self.growl = GrowlNotifier(self.application, [self.notification_name])
-		self.growl.register()
+    def setUp(self):
+        if os.path.exists(ORIGINAL_CONFIG):
+            os.rename(ORIGINAL_CONFIG, BACKUP_CONFIG)
+        self.growl = GrowlNotifier(self.application, [self.notification_name])
+        self.growl.register()
 
-	def test_missing_config(self):
-		self.assertIsTrue(self._notify(description='No config file test'))
+    def test_missing_config(self):
+        self.assertIsTrue(self._notify(description='No config file test'))
 
-	def tearDown(self):
-		if os.path.exists(BACKUP_CONFIG):
-			os.rename(BACKUP_CONFIG, ORIGINAL_CONFIG)
+    def tearDown(self):
+        if os.path.exists(BACKUP_CONFIG):
+            os.rename(BACKUP_CONFIG, ORIGINAL_CONFIG)
