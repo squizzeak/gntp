@@ -41,7 +41,7 @@ class _GNTPBuffer(gntp.shim.StringIO):
 		self.write(GNTP_EOL)
 
 	def writeheader(self, key, value):
-		if not isinstance(value, str):
+		if not isinstance(value, basestring):
 			value = str(value)
 		self.write(gntp.shim.b(key))
 		self.write(GNTP_SEP)
