@@ -159,12 +159,24 @@ class _GNTPBase(object):
         if self.password is None:
             raise errors.AuthError('Missing password')
 
+        hash_algo = {
+            'MD5': hashlib.md5,
+            'SHA1': hashlib.sha1,
+            'SHA256': hashlib.sha256,
+            'SHA512': hashlib.sha512,
+        }
+
+        if not self.info['keyHashAlgorithmID'] in hash_algo:
+            raise errors.UnsupportedError('INVALID HASH "%s"' % self.encryptAlgo)
+
+        hashfunction = hash_algo.get(self.info['keyHashAlgorithmID'])
+
         password = self.password.encode('utf8')
         saltHash = self._decode_hex(self.info['salt'])
 
         keyBasis = password + saltHash
-        key = hashlib.sha512(keyBasis).digest()
-        keyHash = hashlib.sha512(key).hexdigest()
+        key = hashfunction(keyBasis).digest()
+        keyHash = hashfunction(key).hexdigest()
 
         if not keyHash.upper() == self.info['keyHash'].upper():
             raise errors.AuthError('Invalid Hash')
