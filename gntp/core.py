@@ -163,8 +163,8 @@ class _GNTPBase(object):
         saltHash = self._decode_hex(self.info['salt'])
 
         keyBasis = password + saltHash
-        key = hashlib.md5(keyBasis).digest()
-        keyHash = hashlib.md5(key).hexdigest()
+        key = hashlib.sha512(keyBasis).digest()
+        keyHash = hashlib.sha512(key).hexdigest()
 
         if not keyHash.upper() == self.info['keyHash'].upper():
             raise errors.AuthError('Invalid Hash')
@@ -308,7 +308,7 @@ class GNTPRegister(_GNTPBase):
 
         :param string data: Message to decode
         """
-        self.raw = gntp.shim.u(data)
+        self.raw = gntp.shim.b(data)
         parts = self.raw.split('\r\n\r\n')
         self.info = self._parse_info(self.raw)
         self._validate_password(password)
@@ -408,7 +408,7 @@ class GNTPNotice(_GNTPBase):
 
         :param string data: Message to decode.
         """
-        self.raw = gntp.shim.u(data)
+        self.raw = gntp.shim.b(data)
         parts = self.raw.split('\r\n\r\n')
         self.info = self._parse_info(self.raw)
         self._validate_password(password)
